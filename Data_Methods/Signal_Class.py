@@ -173,6 +173,82 @@ class Signal_data:
             raise ValueError("Grown seed mask has not been computed yet.")
         return self.grown_seed_mask
 
+
+
+
+    def Consolidated_methods(self,
+                             maximum_gap,
+                             max_vertical_gap,
+                             drift_padding_gap,
+                             min_neighbours,
+                             gate_requirment_for_false = "or",
+                             growth_threshold_above_median = 0,
+                             silence_bool = True,
+                             ):
+        """
+        Perform full consolidation and pruning workflow on the signal snippet.
+
+        Parameters:
+        - maximum_gap (int): Maximum gap for horizontal pruning and consolidation.
+        - max_vertical_gap (int): Maximum vertical gap for vertical pruning.
+        - drift_padding_gap (int): Horizontal padding for vertical pruning.
+        - min_neighbours (int): Minimum neighbours for vertical pruning.
+        - gate_requirment_for_false (str): Logical operation for combining pruning masks ("and", "or", "horizontal", "vertical").
+        - growth_threshold_above_median (float): Threshold above median for seed growth.
+        - silence_bool (bool): Whether to silence warnings during consolidation.
+
+        Returns:
+        - grown_signal (np.ndarray): Signal snippet masked by the grown seed mask.
+        """
+        self.compute_row_statistics()
+        self.get_seeds()
+
+        vertical_pruned_mask = self._prune_vertical(
+            max_vertical_gap=max_vertical_gap,
+            drift_padding_gap=maximum_gap,   
+            min_neighbours=min_neighbours,
+        )
+
+        horizontal_pruned_mask = signal_instance._prune_horizontal(
+            max_horizontal_gap=maximum_gap
+        )
+        merged_pruned_mask, hor_mask_2d, ver_mask_2d = self.prune_methods(
+            gate_requirment_for_false=gate_requirment_for_false,
+            max_horizontal_gap=maximum_gap,
+            max_vertical_gap=max_vertical_gap,
+            drift_padding_gap=maximum_gap,
+            min_neighbours=min_neighbours,
+            return_masks=True,
+        )
+
+        pruned_signal = self._return_signal_masked(merged_pruned_mask)
+
+        consolidated_seeds = self.consolidate_seeds(
+            max_pixel_distance_either_side=maximum_gap,
+            silence_bool = silence_bool
+        )
+        consolidated_signal = self._return_signal_masked(consolidated_seeds)
+
+        grown_seeds = self.grow_seeds(
+            growth_threshold_above_median=0
+        )
+
+        grown_signal = self._return_signal_masked(grown_seeds)
+
+        # end_time = time.perf_counter()
+        # print(f"Time taken for signal processing: {end_time - start_time} seconds")
+
+        return grown_signal
+
+
+
+
+
+
+
+
+
+
     def compute_row_statistics(self):
         """
         Compute median and standard deviation for each row in the 2D signal array.
