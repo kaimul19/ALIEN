@@ -1096,6 +1096,7 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.show()
+    plt.close()
 
 
     ################################################################################
@@ -1103,18 +1104,19 @@ if __name__ == "__main__":
     # plot the consolidated seeds using plot_1D
 
 
-
+    print("now plotting the consolidated seeds:")
     signal_instance.plot_1D(
         mask_type="consolidated",
         save_location=None,
         show_plot_bool=True,
     )
+    print("now plotting the grown seeds:")
     signal_instance.plot_1D(
         mask_type="grown",
         save_location=None,
         show_plot_bool=True,
     )
-
+    print("now plotting the consolidated seeds in 2D:")
     signal_instance.plot_2D(
         mask_type="grown",
         save_location=None,
