@@ -57,7 +57,7 @@ def scan_horizontal_surroundings(
     return pruned_2d
 
 
-class signal_data:
+class Signal_data:
     def __init__(
         self,
         signal_snippet: np.ndarray,
