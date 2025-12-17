@@ -5,7 +5,7 @@ from numba import njit, prange
 
 # dont jit this function as it uses non numba functions
 def _consolidate_1d(
-    flattened_array: np.ndarray, maximum_gap: int, unique_id: np.ndarray
+    flattened_array: np.ndarray, maximum_gap: int, unique_id: np.ndarray, silence_warnings: bool = True
 ) -> np.ndarray:
     """
     Merge 1-runs in a 1D boolean/integer mask by filling gaps of length <= maximum_gap.
@@ -18,9 +18,10 @@ def _consolidate_1d(
     ends = np.flatnonzero(distances == -1) - 1  # find end indices of seeds
 
     if starts.size == 0:
-        print(
-            f"No Seeds Found in the snippet at index: {unique_id}"
-        )  # debug message if no seeds found
+        if not silence_warnings:
+            print(
+                f"No Seeds Found in the snippet at index: {unique_id}"
+            )  # debug message if no seeds found
         return np.zeros_like(flattened_array, dtype=bool)
 
     gaps = (starts[1:] - ends[:-1]) - 1  # compute gaps between seeds
