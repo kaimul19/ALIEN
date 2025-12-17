@@ -209,7 +209,7 @@ class Signal_data:
             min_neighbours=min_neighbours,
         )
 
-        horizontal_pruned_mask = signal_instance._prune_horizontal(
+        horizontal_pruned_mask = self._prune_horizontal(
             max_horizontal_gap=maximum_gap
         )
         merged_pruned_mask, hor_mask_2d, ver_mask_2d = self.prune_methods(
