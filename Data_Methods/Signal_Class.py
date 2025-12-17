@@ -214,7 +214,7 @@ class Signal_data:
             out=self.initial_boolean_mask,
         )
 
-    def consolidate_seeds(self, max_pixel_distance_either_side=5, use_final_mask=True):
+    def consolidate_seeds(self, max_pixel_distance_either_side=5, use_final_mask=True, silence_bool=True):
         """
         Consolidate seed pixels into groups based on adjacency.
         This method merges seed pixels that are within a specified maximum pixel distance
@@ -261,7 +261,7 @@ class Signal_data:
                 )
         flat = work.ravel()  # flatten for processing
         cons_flat = _consolidate_1d(
-            flat, max_pixel_distance_either_side, unique_id=self.unique_id
+            flat, max_pixel_distance_either_side, unique_id=self.unique_id, silence_warnings = silence_bool
         )  # call merging method
         self.consolidated_group_boolean_mask = cons_flat.reshape(
             self.number_of_rows, self.number_of_columns + seperation
