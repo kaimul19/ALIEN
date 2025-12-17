@@ -44,6 +44,7 @@ def scan_horizontal_surroundings(
     pruned_2d: np.ndarray,
     true_indicies: np.ndarray,
     max_horizontal_gap: int,
+    min_neighbours = 1, 
 ) -> np.ndarray:
 
     # make a verified_array where it is starting as a False array
@@ -355,7 +356,8 @@ class Signal_data:
 
         pruned_2d = scan_horizontal_surroundings(pruned_2d, 
                                                     true_indicies=true_indicies, 
-                                                    max_horizontal_gap=max_horizontal_gap)
+                                                    max_horizontal_gap=max_horizontal_gap,
+                                                    min_neighbours=min_neighbours)
 
         pruned_mask = pruned_2d.astype(bool, copy=False)  # convert back to boolean mask
 
