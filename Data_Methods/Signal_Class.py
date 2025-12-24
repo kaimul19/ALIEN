@@ -991,7 +991,7 @@ class Signal_data:
                 f"mask_type must be one of {valid_mask_types}, None, or a NumPy array mask."
             )
 
-        fig, ax = plt.subplots(figsize=(12, 8))
+        fig, ax = plt.subplots(figsize=(8, 5))
 
         cax = ax.imshow(
             self.signal_snippet, aspect="auto", cmap="viridis", interpolation="nearest"
